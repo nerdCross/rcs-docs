@@ -1,0 +1,488 @@
+﻿<div class="container">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1>Documentation</h1>
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Complete guide to installing, configuring, and using the Remote Control System v2.0.</p>
+    </div>
+    
+    <!-- Quick Start Video -->
+    <div class="video-placeholder" data-video-id="quickstart-video">
+        <div class="play-icon">▶️</div>
+        <div class="placeholder-text">🚀 Quick Start Video Tutorial</div>
+        <div class="placeholder-caption">Placeholder: quickstart-video.mp4 - Step-by-step video guide to first connection</div>
+        <div class="duration">⏱️ Duration: 2:30</div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- USER GUIDE SECTION -->
+    <!-- ============================================ -->
+    <h2>📖 User Guide</h2>
+    
+    <!-- Control Interface -->
+    <h3>🖥️ Control Interface</h3>
+    <div class="image-placeholder">
+        <div class="placeholder-text">🎮 Main Control Interface</div>
+        <div class="placeholder-caption">Placeholder: control-interface.png - Shows the main control window with remote screen</div>
+    </div>
+    <p>The client interface is built with Pygame and provides both control and dashboard modes. Press <kbd>F2</kbd> to toggle between modes.</p>
+    
+    <div class="image-row">
+        <div class="image-placeholder">
+            <div class="placeholder-text">🖱️ Control Mode - Active Control</div>
+            <div class="placeholder-caption">Placeholder: control-mode.png - Shows active control mode with green "CONTROL ACTIVE" indicator</div>
+        </div>
+        <div class="image-placeholder">
+            <div class="placeholder-text">📊 Dashboard Mode - Server Management</div>
+            <div class="placeholder-caption">Placeholder: dashboard-mode.png - Shows dashboard with server list, logs, and statistics</div>
+        </div>
+    </div>
+    
+    <!-- Keyboard Shortcuts -->
+    <h3>⌨️ Keyboard Shortcuts</h3>
+    <div class="keyboard-shortcuts">
+        <div class="shortcut"><kbd>ESC</kbd> → Release mouse capture</div>
+        <div class="shortcut"><kbd>F2</kbd> → Toggle Dashboard</div>
+        <div class="shortcut"><kbd>F5</kbd> → Refresh</div>
+        <div class="shortcut"><kbd>F11</kbd> → Toggle Fullscreen</div>
+        <div class="shortcut"><kbd>F12</kbd> → Take Screenshot</div>
+        <div class="shortcut"><kbd>Ctrl + D</kbd> → Disconnect</div>
+        <div class="shortcut"><kbd>Ctrl + Q</kbd> → Quick Connect</div>
+        <div class="shortcut"><kbd>Ctrl + R</kbd> → Reconnect</div>
+    </div>
+    <div class="image-placeholder">
+        <div class="placeholder-text">⌨️ Keyboard Shortcuts Reference Card</div>
+        <div class="placeholder-caption">Placeholder: keyboard-shortcuts.png - Visual reference card of all shortcuts</div>
+    </div>
+    
+    <!-- Mouse Controls -->
+    <h3>🖱️ Mouse Controls</h3>
+    <div class="card-grid">
+        <div class="card">
+            <h4>Click to Capture</h4>
+            <p>Click the window to capture mouse control. The remote cursor will follow your movements.</p>
+        </div>
+        <div class="card">
+            <h4>Click to Interact</h4>
+            <p>Once captured, all clicks are sent to the remote computer.</p>
+        </div>
+        <div class="card">
+            <h4>Scroll Wheel</h4>
+            <p>Scroll up/down to scroll on the remote computer.</p>
+        </div>
+        <div class="card">
+            <h4>ESC to Release</h4>
+            <p>Press ESC to release mouse capture and return to local control.</p>
+        </div>
+    </div>
+    <div class="image-placeholder">
+        <div class="placeholder-text">🖱️ Mouse Capture Indicator</div>
+        <div class="placeholder-caption">Placeholder: mouse-capture.png - Shows the green "CONTROL ACTIVE" indicator</div>
+    </div>
+    
+    <!-- Dashboard Mode -->
+    <h3>📊 Dashboard Mode</h3>
+    <p>Press <kbd>F2</kbd> to toggle the dashboard, which provides real-time system monitoring and management.</p>
+    <div class="image-placeholder">
+        <div class="placeholder-text">📊 Complete Dashboard View</div>
+        <div class="placeholder-caption">Placeholder: dashboard-full.png - Shows the full dashboard with server list, logs, and stats</div>
+    </div>
+    
+    <h4>Dashboard Features:</h4>
+    <div class="image-row">
+        <div class="image-placeholder">
+            <div class="placeholder-text">🖥️ Server List</div>
+            <div class="placeholder-caption">Placeholder: server-list.png - Shows active servers with status and latency</div>
+        </div>
+        <div class="image-placeholder">
+            <div class="placeholder-text">📝 Audit Log Viewer</div>
+            <div class="placeholder-caption">Placeholder: audit-log.png - Shows recent activity log entries</div>
+        </div>
+    </div>
+    <div class="image-row">
+        <div class="image-placeholder">
+            <div class="placeholder-text">📈 Performance Metrics</div>
+            <div class="placeholder-caption">Placeholder: performance-metrics.png - Shows CPU, memory, and latency graphs</div>
+        </div>
+        <div class="image-placeholder">
+            <div class="placeholder-text">⚙️ Server Details</div>
+            <div class="placeholder-caption">Placeholder: server-details.png - Shows detailed information about selected server</div>
+        </div>
+    </div>
+    
+    <!-- Headless Mode -->
+    <h3>🖥️ Headless Mode</h3>
+    <p>Run the client without a GUI for server environments or automation.</p>
+    <div class="image-placeholder">
+        <div class="placeholder-text">🖥️ Terminal Dashboard (Curses UI)</div>
+        <div class="placeholder-caption">Placeholder: headless-mode.png - Shows the terminal-based dashboard with curses interface</div>
+    </div>
+    <div class="code-block">
+        <pre><code><span class="comment"># Headless with terminal UI (curses)</span>
+start_client.bat --headless --server-ip 192.168.1.100
+
+<span class="comment"># Headless with simple text output</span>
+start_client.bat --headless --no-curses --server-ip 192.168.1.100
+
+<span class="comment"># Start in dashboard mode</span>
+start_client.bat --dashboard --ip 192.168.1.100</code></pre>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- NETWORK & SECURITY SECTION -->
+    <!-- ============================================ -->
+    <h2>🌐 Network & Security</h2>
+    
+    <!-- NAT Traversal -->
+    <h3>NAT Traversal</h3>
+    <p>The system uses a 3-layer approach to guarantee connectivity on any network.</p>
+    <div class="image-placeholder">
+        <div class="placeholder-text">🌐 NAT Traversal Layers Diagram</div>
+        <div class="placeholder-caption">Placeholder: nat-traversal.png - Visual diagram showing UDP hole punch → TCP hole punch → Relay proxy flow</div>
+    </div>
+    <div class="table-wrapper">
+         <table>
+            <thead>
+                全
+                    <th>Method</th>
+                    <th>Speed</th>
+                    <th>Success Rate</th>
+                    <th>When Used</th>
+                 </thead>
+            <tbody>
+                <tr>
+                    <td><strong>UDP Hole Punch</strong></td>
+                    <td>5-20ms</td>
+                    <td>70-95%</td>
+                    <td>Home networks, most routers</td>
+                 </tr>
+                 <tr>
+                    <td><strong>TCP Hole Punch</strong></td>
+                    <td>10-30ms</td>
+                    <td>85-98%</td>
+                    <td>When UDP is blocked</td>
+                 </tr>
+                 <tr>
+                    <td><strong>Relay Proxy</strong></td>
+                    <td>50-200ms</td>
+                    <td>100%</td>
+                    <td>Corporate firewalls, all networks</td>
+                 </tr>
+            </tbody>
+         </table>
+    </div>
+    <div class="tip">💡 The system automatically tries methods in order: UDP → TCP → Relay. You will always connect!</div>
+    
+    <!-- Server Discovery -->
+    <h3>🔍 Server Discovery</h3>
+    <p>Servers broadcast their presence automatically. Clients discover them without any configuration.</p>
+    <div class="image-placeholder">
+        <div class="placeholder-text">🔍 Discovery Broadcast</div>
+        <div class="placeholder-caption">Placeholder: discovery-broadcast.png - Shows UDP broadcast from server to network</div>
+    </div>
+    <div class="code-block">
+        <pre><code><span class="comment"># List available servers</span>
+start_client.bat --list
+
+<span class="comment"># Output:</span>
+<span class="comment"># Found 2 server(s):</span>
+<span class="comment">#   1. Office Desktop - 192.168.1.100</span>
+<span class="comment">#   2. Lab Computer - 192.168.1.101</span></code></pre>
+    </div>
+    
+    <!-- Cloud Relay -->
+    <h3>☁️ Cloud Relay</h3>
+    <p>Optional Netlify deployment for internet access when direct connections are impossible.</p>
+    <div class="image-placeholder">
+        <div class="placeholder-text">☁️ Cloud Relay Architecture</div>
+        <div class="placeholder-caption">Placeholder: cloud-relay-arch.png - Shows how client and server connect through Netlify</div>
+    </div>
+    <div class="code-block">
+        <pre><code><span class="comment"># Deploy to Netlify</span>
+npm install -g netlify-cli
+cd netlify-cloud-relay
+netlify deploy --prod
+
+<span class="comment"># Set environment variables</span>
+netlify env:set STORAGE_BACKEND github-gist
+netlify env:set GITHUB_TOKEN your_token</code></pre>
+    </div>
+    
+    <!-- Security Architecture -->
+    <h3>🛡️ Security Architecture</h3>
+    <p>7 layers of defense protect your connections from unauthorized access.</p>
+    <div class="image-placeholder">
+        <div class="placeholder-text">🛡️ 7 Layers of Defense</div>
+        <div class="placeholder-caption">Placeholder: security-layers.png - Visual representation of all 7 security layers</div>
+    </div>
+    <div class="table-wrapper">
+         <table>
+            <thead>
+                全
+                    <th>Layer</th>
+                    <th>Control</th>
+                    <th>Implementation</th>
+                 </thead>
+            <tbody>
+                 <tr><td>1</td><td>Network Security</td><td>HTTPS only, IP whitelisting, TLS 1.2/1.3</td></tr>
+                 <tr><td>2</td><td>Rate Limiting</td><td>10/min register, 5/min connect, 5/15min auth</td></tr>
+                 <tr><td>3</td><td>Authentication</td><td>SHA256 + salt, constant-time comparison, session tokens</td></tr>
+                 <tr><td>4</td><td>Authorization</td><td>RBAC, granular permissions, API keys</td></tr>
+                 <tr><td>5</td><td>Input Validation</td><td>SQL injection, XSS, command injection prevention</td></tr>
+                 <tr><td>6</td><td>Audit & Monitoring</td><td>Complete audit trail, JSON logs, SIEM-ready</td></tr>
+                 <tr><td>7</td><td>Integrity</td><td>SHA256 checksums, isolated Python environment</td></tr>
+            </tbody>
+         </table>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- TROUBLESHOOTING SECTION -->
+    <!-- ============================================ -->
+    <h2>🔧 Troubleshooting</h2>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>🔴 "Can't connect to server"</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li><strong>Windows:</strong> <code>Get-Service RemoteControlServer</code></li>
+                <li><strong>Linux:</strong> <code>systemctl status remotecontrol</code> or <code>ps aux | grep python</code></li>
+                <li><strong>macOS:</strong> <code>launchctl list | grep remotecontrol</code> or <code>ps aux | grep python</code></li>
+                <li>Check firewall: Allow port 5000</li>
+                <li>Verify IP address and network connectivity: <code>ping &lt;server_ip&gt;</code></li>
+            </ul>
+            <div class="image-placeholder">
+                <div class="placeholder-text">🔧 Firewall Configuration</div>
+                <div class="placeholder-caption">Placeholder: firewall-config.png - Shows firewall rule configuration</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>🔐 "Authentication failed"</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p><strong>Solution:</strong> Reset the admin password:</p>
+            <div class="code-block"><pre><code>.\secure_server.ps1 -ResetPassword   <span class="comment"># Windows</span>
+./secure_server.sh --reset-password  <span class="comment"># Linux/macOS</span></code></pre></div>
+            <p>The new password will be displayed. Save it immediately!</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>🐌 "High latency / slow response"</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Check which connection method is being used (UDP is fastest, Relay is slowest)</li>
+                <li>Reduce screen quality in server config: <code>"screen_quality": 50</code></li>
+                <li>Use direct IP connection if possible</li>
+                <li>Check network bandwidth: <code>iperf3 -c &lt;server_ip&gt;</code></li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>🍎 "macOS: Screen Recording not working"</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p><strong>Solution:</strong> Grant screen recording permission:</p>
+            <ol>
+                <li>Open <strong>System Settings</strong> → <strong>Privacy & Security</strong></li>
+                <li>Select <strong>Screen Recording</strong></li>
+                <li>Add your terminal app (Terminal, iTerm2, etc.)</li>
+                <li>Restart the terminal app</li>
+            </ol>
+            <div class="image-placeholder">
+                <div class="placeholder-text">🍎 Screen Recording Permission</div>
+                <div class="placeholder-caption">Placeholder: macos-permissions.png - Shows Screen Recording permission settings</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>🐧 "Linux: xdotool not found"</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p><strong>Solution:</strong> Install xdotool:</p>
+            <div class="code-block"><pre><code><span class="comment"># Ubuntu/Debian</span>
+sudo apt install xdotool
+
+<span class="comment"># Fedora/RHEL</span>
+sudo dnf install xdotool
+
+<span class="comment"># Arch Linux</span>
+sudo pacman -S xdotool</code></pre></div>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>🪟 "Windows: Service won't start"</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p><strong>Solution:</strong></p>
+            <ul>
+                <li>Check logs: <code>Get-Content "C:\Program Files\RemoteControlServer\logs\server.log" -Tail 50</code></li>
+                <li>Verify port is not in use: <code>netstat -an | findstr :5000</code></li>
+                <li>Restart service: <code>Restart-Service RemoteControlServer</code></li>
+                <li>Reinstall service: <code>.\remote_service.ps1 -Mode uninstall; .\remote_service.ps1 -Mode install</code></li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- LOG FILES SECTION -->
+    <!-- ============================================ -->
+    <h2>📁 Log Files</h2>
+    <div class="table-wrapper">
+         <table>
+            <thead>
+                全
+                    <th>Log</th>
+                    <th>Location</th>
+                    <th>Purpose</th>
+                 </thead>
+            <tbody>
+                 <tr>
+                    <td><code>server.log</code></td>
+                    <td>Windows: <code>C:\Program Files\RemoteControlServer\logs\</code><br>Linux/macOS: <code>~/RemoteControlSystem/logs/</code></td>
+                    <td>Server events, errors, connection logs</td>
+                 </tr>
+                 <tr>
+                    <td><code>client.log</code></td>
+                    <td>Windows: <code>%USERPROFILE%\RemoteControlClient\logs\</code><br>Linux/macOS: <code>~/RemoteControlClient/logs/</code></td>
+                    <td>Client events, connection history</td>
+                 </tr>
+                 <tr>
+                    <td><code>audit.log</code></td>
+                    <td>Same as server log</td>
+                    <td>Security audit trail (logins, commands, transfers)</td>
+                 </tr>
+                 <tr>
+                    <td><code>performance.log</code></td>
+                    <td>Same as server log</td>
+                    <td>Performance metrics (CPU, memory, latency)</td>
+                 </tr>
+            </tbody>
+         </table>
+    </div>
+    <div class="image-placeholder">
+        <div class="placeholder-text">📜 Log Viewer Dashboard</div>
+        <div class="placeholder-caption">Placeholder: log-viewer.png - Shows the built-in log viewer with filtering options</div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- FAQ SECTION -->
+    <!-- ============================================ -->
+    <h2>❓ Frequently Asked Questions</h2>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Can I control multiple computers?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>Yes! Add multiple servers to favorites in client_config.json. The server supports up to 10 concurrent connections.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Is this secure over the internet?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>Yes. All traffic is encrypted with TLS + Fernet. Authentication is required. Rate limiting prevents brute force attacks. The system follows zero-trust principles.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Does this work on Linux/Mac?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>Yes! Both client and server work on Linux and Mac with Python 3.8+ installed. Input emulation uses xdotool/pyautogui (Linux) and Quartz (macOS).</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>How much bandwidth does it use?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>Approximately 1-5 MB per minute depending on screen activity. Screen quality settings can reduce bandwidth usage.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Can I transfer files?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>File transfer is supported but disabled by default for security. Enable in server_config.json: <code>"file_transfer": true</code></p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>What's the difference between local and cloud mode?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>Local mode uses direct connections (faster, 5-20ms). Cloud mode uses Netlify relay (works anywhere, 50-200ms). The system automatically selects the best method.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>Is there a mobile app?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>Planned for v2.1. Currently works on desktop browsers via web client and any device with Python support.</p>
+        </div>
+    </div>
+    
+    <div class="faq-item">
+        <div class="faq-question">
+            <span>How do I update the system?</span>
+            <span class="faq-toggle">+</span>
+        </div>
+        <div class="faq-answer">
+            <p>Pull the latest code and rebuild packages:</p>
+            <div class="code-block"><pre><code>git pull origin main
+.\scripts\build_separate_packages.ps1
+.\deploy_server.ps1 -PackagePath .\deploy\RemoteControl_Server_v2.0.0.zip -RegisterService</code></pre></div>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- SUPPORT SECTION -->
+    <!-- ============================================ -->
+    <div class="success" style="text-align: center; margin: 3rem 0;">
+        <h3 style="margin-bottom: 0.5rem;">Need Additional Help?</h3>
+        <p style="margin-bottom: 1rem;">Our community and support team are ready to assist you.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="https://github.com/yourusername/remote-control-system/issues" class="btn btn-primary">Report Issue</a>
+            <a href="https://github.com/yourusername/remote-control-system/discussions" class="btn btn-secondary">Ask Question</a>
+            <a href="https://github.com/yourusername/remote-control-system/wiki" class="btn btn-outline">Community Wiki</a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">Or email us at: <code>support@remotecontrol.com</code></p>
+    </div>
+</div>

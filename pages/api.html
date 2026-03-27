@@ -1,0 +1,570 @@
+﻿<div class="container">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1>API Reference</h1>
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Complete REST API documentation for the Netlify Cloud Relay service. All endpoints are secured with rate limiting, authentication, and input validation.</p>
+    </div>
+    
+    <!-- Netlify Dashboard Placeholder -->
+    <div class="image-placeholder">
+        <div class="placeholder-text">📊 Netlify Deployment Dashboard</div>
+        <div class="placeholder-caption">Placeholder: netlify-dashboard.png - Shows the Netlify deployment dashboard with function logs and environment variables</div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- API OVERVIEW -->
+    <!-- ============================================ -->
+    <h2>📡 API Overview</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">🌐</div>
+            <h3>Base URL</h3>
+            <p><code>https://your-site.netlify.app/api/</code></p>
+            <p>All endpoints are relative to this base URL. Replace with your deployed Netlify site URL.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon">🔒</div>
+            <h3>Authentication</h3>
+            <p>Some endpoints require authentication via Bearer token. Obtain token from <code>POST /api/auth</code>.</p>
+            <p>Include in headers: <code>Authorization: Bearer &lt;token&gt;</code></p>
+        </div>
+        <div class="card">
+            <div class="card-icon">⏱️</div>
+            <h3>Rate Limits</h3>
+            <p>Each endpoint has specific rate limits to prevent abuse. 429 responses include a <code>Retry-After</code> header.</p>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- REGISTRATION ENDPOINT -->
+    <!-- ============================================ -->
+    <h2>📝 POST /api/register</h2>
+    <p>Registers a server with the cloud relay. Called by the controlled computer when it starts up.</p>
+    
+    <h3>Rate Limit</h3>
+    <p><code>10 requests per minute per IP</code></p>
+    
+    <h3>Request Headers</h3>
+    <div class="code-block">
+        <pre><code>Content-Type: application/json</code></pre>
+    </div>
+    
+    <h3>Request Body</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"server_id"</span>: <span class="string">"office-pc-123"</span>,     <span class="comment">// Required, unique identifier (max 255 chars, alphanumeric + _ -)</span>
+    <span class="string">"name"</span>: <span class="string">"Office Desktop"</span>,         <span class="comment">// Optional, display name (max 100 chars)</span>
+    <span class="string">"port"</span>: <span class="number">5000</span>                      <span class="comment">// Optional, server port (default: 5000, range 1-65535)</span>
+}</code></pre>
+    </div>
+    
+    <h3>Response (200 OK)</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"status"</span>: <span class="string">"registered"</span>,
+    <span class="string">"server_id"</span>: <span class="string">"office-pc-123"</span>,
+    <span class="string">"registered_at"</span>: <span class="string">"2024-01-15T10:30:00Z"</span>,
+    <span class="string">"message"</span>: <span class="string">"Server registered successfully"</span>
+}</code></pre>
+    </div>
+    
+    <h3>Error Responses</h3>
+    <div class="table-wrapper">
+        能able
+            <thead>
+                全<th>Status Code</th><th>Description</th> </thead>
+            <tbody>
+                <tr><td>400</td><td>Validation failed (missing server_id, invalid format)</td> </tr>
+                <tr><td>409</td><td>Conflict (server already registered and active)</td> </tr>
+                <tr><td>413</td><td>Request too large (max 10KB)</td> </tr>
+                <tr><td>415</td><td>Unsupported media type (must be application/json)</td> </tr>
+                <tr><td>429</td><td>Too many requests (rate limit exceeded)</td> </tr>
+                <tr><td>500</td><td>Internal server error</td> </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- HEARTBEAT ENDPOINT -->
+    <!-- ============================================ -->
+    <h2>💓 POST /api/heartbeat/:server_id</h2>
+    <p>Updates a server's heartbeat timestamp. Called every 30 seconds to keep the server active.</p>
+    
+    <h3>Rate Limit</h3>
+    <p><code>10 requests per minute per IP</code></p>
+    
+    <h3>URL Parameters</h3>
+    <div class="table-wrapper">
+        能able
+            <thead> <th>Parameter</th><th>Description</th> </thead>
+            <tbody> <tr><td><code>server_id</code></td><td>The unique identifier of the server</td></tr> </tbody>
+        点able
+    </div>
+    
+    <h3>Request Body</h3>
+    <p>Empty body (optional timestamp may be sent)</p>
+    
+    <h3>Response (200 OK)</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"status"</span>: <span class="string">"ok"</span>,
+    <span class="string">"server_id"</span>: <span class="string">"office-pc-123"</span>,
+    <span class="string">"timestamp"</span>: <span class="string">"2024-01-15T10:30:00Z"</span>
+}</code></pre>
+    </div>
+    
+    <h3>Error Responses</h3>
+    <div class="table-wrapper">
+        能able
+            <thead> <th>Status Code</th><th>Description</th> </thead>
+            <tbody>
+                <tr><td>400</td><td>Invalid server_id format</td> </tr>
+                <tr><td>404</td><td>Server not found</td> </tr>
+                <tr><td>429</td><td>Too many requests (rate limit exceeded)</td> </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- SERVERS LIST ENDPOINT -->
+    <!-- ============================================ -->
+    <h2>📋 GET /api/servers</h2>
+    <p>Lists all active servers (those with heartbeats within the last 5 minutes). Called by clients to discover available servers.</p>
+    
+    <h3>Rate Limit</h3>
+    <p><code>30 requests per minute per IP</code></p>
+    
+    <h3>Response (200 OK)</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"servers"</span>: [
+        {
+            <span class="string">"server_id"</span>: <span class="string">"office-pc-123"</span>,
+            <span class="string">"name"</span>: <span class="string">"Office Desktop"</span>,
+            <span class="string">"registered_at"</span>: <span class="string">"2024-01-15T10:30:00Z"</span>,
+            <span class="string">"last_heartbeat"</span>: <span class="string">"2024-01-15T10:35:00Z"</span>,
+            <span class="string">"status"</span>: <span class="string">"active"</span>
+        }
+    ],
+    <span class="string">"count"</span>: <span class="number">1</span>,
+    <span class="string">"timestamp"</span>: <span class="string">"2024-01-15T10:35:00Z"</span>
+}</code></pre>
+    </div>
+    
+    <h3>Error Responses</h3>
+    <div class="table-wrapper">
+        能able
+            <thead> <th>Status Code</th><th>Description</th> </thead>
+            <tbody>
+                <tr><td>405</td><td>Method not allowed (must be GET)</td> </tr>
+                <tr><td>429</td><td>Too many requests (rate limit exceeded)</td> </tr>
+                <tr><td>500</td><td>Internal server error</td> </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- CONNECTION ENDPOINT -->
+    <!-- ============================================ -->
+    <h2>🔌 POST /api/connect</h2>
+    <p>Requests a connection to a server. Returns a connection token for authentication.</p>
+    
+    <h3>Rate Limit</h3>
+    <p><code>5 requests per minute per IP</code></p>
+    
+    <h3>Request Body</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"server_id"</span>: <span class="string">"office-pc-123"</span>     <span class="comment">// Required, server identifier</span>
+}</code></pre>
+    </div>
+    
+    <h3>Response (200 OK)</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"status"</span>: <span class="string">"connected"</span>,
+    <span class="string">"connection_token"</span>: <span class="string">"a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef12345678"</span>,
+    <span class="string">"relay_port"</span>: <span class="number">6000</span>,
+    <span class="string">"expires_at"</span>: <span class="string">"2024-01-15T11:30:00Z"</span>,
+    <span class="string">"server_info"</span>: {
+        <span class="string">"server_id"</span>: <span class="string">"office-pc-123"</span>,
+        <span class="string">"name"</span>: <span class="string">"Office Desktop"</span>,
+        <span class="string">"port"</span>: <span class="number">5000</span>
+    }
+}</code></pre>
+    </div>
+    
+    <h3>Error Responses</h3>
+    <div class="table-wrapper">
+        能able
+            <thead> <th>Status Code</th><th>Description</th> </thead>
+            <tbody>
+                <tr><td>400</td><td>Validation failed (missing server_id)</td> </tr>
+                <tr><td>404</td><td>Server not found</td> </tr>
+                <tr><td>410</td><td>Server offline (no recent heartbeat)</td> </tr>
+                <tr><td>429</td><td>Too many requests (rate limit exceeded)</td> </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- AUTHENTICATION ENDPOINT -->
+    <!-- ============================================ -->
+    <h2>🔐 POST /api/auth</h2>
+    <p>Authenticates a user and returns a session token for admin operations.</p>
+    
+    <h3>Rate Limit</h3>
+    <p><code>5 requests per 15 minutes per IP</code> (very strict to prevent brute force)</p>
+    
+    <h3>Request Body</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"username"</span>: <span class="string">"admin"</span>,        <span class="comment">// Required, username</span>
+    <span class="string">"password"</span>: <span class="string">"your_password"</span>   <span class="comment">// Required, password</span>
+}</code></pre>
+    </div>
+    
+    <h3>Response (200 OK)</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"status"</span>: <span class="string">"authenticated"</span>,
+    <span class="string">"token"</span>: <span class="string">"a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef12345678"</span>,
+    <span class="string">"expires_at"</span>: <span class="string">"2024-01-15T11:30:00Z"</span>,
+    <span class="string">"token_type"</span>: <span class="string">"Bearer"</span>
+}</code></pre>
+    </div>
+    
+    <h3>Error Responses</h3>
+    <div class="table-wrapper">
+        能able
+            <thead> <th>Status Code</th><th>Description</th> </thead>
+            <tbody>
+                <tr><td>400</td><td>Invalid JSON</td> </tr>
+                <tr><td>401</td><td>Invalid credentials</td> </tr>
+                <tr><td>429</td><td>Too many attempts (rate limit exceeded)</td> </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- TOKEN VERIFICATION ENDPOINT -->
+    <!-- ============================================ -->
+    <h2>✅ POST /api/verify</h2>
+    <p>Verifies a session token and optionally refreshes it if near expiry.</p>
+    
+    <h3>Rate Limit</h3>
+    <p><code>20 requests per minute per IP</code></p>
+    
+    <h3>Request Headers</h3>
+    <div class="code-block">
+        <pre><code>Authorization: Bearer &lt;session_token&gt;</code></pre>
+    </div>
+    
+    <h3>Response (200 OK)</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"status"</span>: <span class="string">"valid"</span>,
+    <span class="string">"username"</span>: <span class="string">"admin"</span>,
+    <span class="string">"expires_at"</span>: <span class="string">"2024-01-15T11:30:00Z"</span>
+}</code></pre>
+    </div>
+    
+    <h3>Error Responses</h3>
+    <div class="table-wrapper">
+        能able
+            <thead> <th>Status Code</th><th>Description</th> </thead>
+            <tbody>
+                <tr><td>401</td><td>No token provided</td> </tr>
+                <tr><td>401</td><td>Invalid token</td> </tr>
+                <tr><td>401</td><td>Token expired</td> </tr>
+                <tr><td>429</td><td>Too many requests (rate limit exceeded)</td> </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- DELETE SERVER ENDPOINT -->
+    <!-- ============================================ -->
+    <h2>🗑️ DELETE /api/delete/:server_id</h2>
+    <p>Removes a server from the registry. Requires admin authentication.</p>
+    
+    <h3>Rate Limit</h3>
+    <p><code>5 requests per hour per IP</code> (strict to prevent accidental deletion)</p>
+    
+    <h3>Request Headers</h3>
+    <div class="code-block">
+        <pre><code>Authorization: Bearer &lt;admin_token&gt;</code></pre>
+    </div>
+    
+    <h3>URL Parameters</h3>
+    <div class="table-wrapper">
+        能able
+            <thead> <th>Parameter</th><th>Description</th> </thead>
+            <tbody> <tr><td><code>server_id</code></td><td>The unique identifier of the server to delete</td></tr> </tbody>
+        点able
+    </div>
+    
+    <h3>Response (200 OK)</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"status"</span>: <span class="string">"deleted"</span>,
+    <span class="string">"server_id"</span>: <span class="string">"office-pc-123"</span>,
+    <span class="string">"deleted_at"</span>: <span class="string">"2024-01-15T10:30:00Z"</span>
+}</code></pre>
+    </div>
+    
+    <h3>Error Responses</h3>
+    <div class="table-wrapper">
+        能able
+            <thead> <th>Status Code</th><th>Description</th> </thead>
+            <tbody>
+                <tr><td>400</td><td>Invalid server_id</td> </tr>
+                <tr><td>401</td><td>Unauthorized (invalid admin token)</td> </tr>
+                <tr><td>404</td><td>Server not found</td> </tr>
+                <tr><td>429</td><td>Too many requests (rate limit exceeded)</td> </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- UPDATE SERVER ENDPOINT -->
+    <!-- ============================================ -->
+    <h2>✏️ PUT /api/update/:server_id</h2>
+    <p>Updates server information (name, metadata, tags). Requires admin authentication.</p>
+    
+    <h3>Rate Limit</h3>
+    <p><code>10 requests per minute per IP</code></p>
+    
+    <h3>Request Headers</h3>
+    <div class="code-block">
+        <pre><code>Authorization: Bearer &lt;admin_token&gt;
+Content-Type: application/json</code></pre>
+    </div>
+    
+    <h3>Request Body</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"name"</span>: <span class="string">"New Office Desktop"</span>,        <span class="comment">// Optional, new display name</span>
+    <span class="string">"metadata"</span>: {                         <span class="comment">// Optional, custom metadata</span>
+        <span class="string">"location"</span>: <span class="string">"Building A"</span>,
+        <span class="string">"department"</span>: <span class="string">"Engineering"</span>
+    },
+    <span class="string">"tags"</span>: [<span class="string">"production"</span>, <span class="string">"windows"</span>]      <span class="comment">// Optional, tags for organization</span>
+}</code></pre>
+    </div>
+    
+    <h3>Response (200 OK)</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"status"</span>: <span class="string">"updated"</span>,
+    <span class="string">"server_id"</span>: <span class="string">"office-pc-123"</span>,
+    <span class="string">"updated_fields"</span>: [<span class="string">"name"</span>, <span class="string">"metadata"</span>],
+    <span class="string">"updated_at"</span>: <span class="string">"2024-01-15T10:30:00Z"</span>
+}</code></pre>
+    </div>
+    
+    <h3>Error Responses</h3>
+    <div class="table-wrapper">
+        能able
+            <thead> <th>Status Code</th><th>Description</th> </thead>
+            <tbody>
+                <tr><td>400</td><td>Invalid JSON or validation failed</td> </tr>
+                <tr><td>401</td><td>Unauthorized (invalid admin token)</td> </tr>
+                <tr><td>404</td><td>Server not found</td> </tr>
+                <tr><td>429</td><td>Too many requests (rate limit exceeded)</td> </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- RELAY ENDPOINTS -->
+    <!-- ============================================ -->
+    <h2>🔄 Relay Endpoints (WebSocket-like)</h2>
+    <p>These endpoints provide a WebSocket-like relay using HTTP long-polling. Used when direct connections fail.</p>
+    
+    <h3>POST /api/relay/create</h3>
+    <p>Creates a new relay session.</p>
+    <div class="code-block">
+        <pre><code><span class="comment"># Request</span>
+POST /api/relay/create
+Content-Type: application/json
+
+{
+    <span class="string">"server_id"</span>: <span class="string">"office-pc-123"</span>,
+    <span class="string">"connection_token"</span>: <span class="string">"abc123..."</span>
+}
+
+<span class="comment"># Response</span>
+{
+    <span class="string">"status"</span>: <span class="string">"relay_ready"</span>,
+    <span class="string">"session_id"</span>: <span class="string">"relay-session-456"</span>
+}</code></pre>
+    </div>
+    
+    <h3>GET /api/relay/stream/:session_id</h3>
+    <p>Long-polling endpoint. Stays open up to 30 seconds, returns when data arrives.</p>
+    <div class="code-block">
+        <pre><code><span class="comment"># Request (long-poll, stays open)</span>
+GET /api/relay/stream/relay-session-456?role=controller
+
+<span class="comment"># Response when data available</span>
+{
+    <span class="string">"type"</span>: <span class="string">"data"</span>,
+    <span class="string">"payload"</span>: <span class="string">"base64_encoded_data"</span>,
+    <span class="string">"timestamp"</span>: <span class="string">"2024-01-15T10:30:00Z"</span>
+}
+
+<span class="comment"># Response when no data (204 No Content)</span>
+<span class="comment"># (client should immediately reconnect)</span></code></pre>
+    </div>
+    
+    <h3>POST /api/relay/send/:session_id</h3>
+    <p>Sends data through the relay to the other party.</p>
+    <div class="code-block">
+        <pre><code><span class="comment"># Request</span>
+POST /api/relay/send/relay-session-456
+Content-Type: application/json
+
+{
+    <span class="string">"role"</span>: <span class="string">"controller"</span>,
+    <span class="string">"data_base64"</span>: <span class="string">"base64_encoded_data"</span>
+}
+
+<span class="comment"># Response</span>
+{
+    <span class="string">"status"</span>: <span class="string">"forwarded"</span>
+}</code></pre>
+    </div>
+    
+    <h3>DELETE /api/relay/close/:session_id</h3>
+    <p>Closes a relay session and cleans up resources.</p>
+    <div class="code-block">
+        <pre><code><span class="comment"># Request</span>
+DELETE /api/relay/close/relay-session-456
+
+<span class="comment"># Response</span>
+{
+    <span class="string">"status"</span>: <span class="string">"closed"</span>
+}</code></pre>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- STATUS ENDPOINT -->
+    <!-- ============================================ -->
+    <h2>📊 GET /api/status</h2>
+    <p>Returns the health status and statistics of the cloud relay service.</p>
+    
+    <h3>Rate Limit</h3>
+    <p><code>60 requests per minute per IP</code> (public endpoint)</p>
+    
+    <h3>Response (200 OK)</h3>
+    <div class="code-block">
+        <pre><code>{
+    <span class="string">"status"</span>: <span class="string">"healthy"</span>,
+    <span class="string">"version"</span>: <span class="string">"2.0.0"</span>,
+    <span class="string">"timestamp"</span>: <span class="string">"2024-01-15T10:30:00Z"</span>,
+    <span class="string">"storage"</span>: {
+        <span class="string">"backend"</span>: <span class="string">"github-gist"</span>,
+        <span class="string">"total_servers"</span>: <span class="number">5</span>,
+        <span class="string">"active_servers"</span>: <span class="number">3</span>
+    },
+    <span class="string">"endpoints"</span>: [
+        {<span class="string">"path"</span>: <span class="string">"/api/register"</span>, <span class="string">"method"</span>: <span class="string">"POST"</span>, <span class="string">"description"</span>: <span class="string">"Register a server"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/heartbeat/:id"</span>, <span class="string">"method"</span>: <span class="string">"POST"</span>, <span class="string">"description"</span>: <span class="string">"Update server heartbeat"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/servers"</span>, <span class="string">"method"</span>: <span class="string">"GET"</span>, <span class="string">"description"</span>: <span class="string">"List servers"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/connect"</span>, <span class="string">"method"</span>: <span class="string">"POST"</span>, <span class="string">"description"</span>: <span class="string">"Request connection"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/relay/create"</span>, <span class="string">"method"</span>: <span class="string">"POST"</span>, <span class="string">"description"</span>: <span class="string">"Create relay session"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/relay/stream/:id"</span>, <span class="string">"method"</span>: <span class="string">"GET"</span>, <span class="string">"description"</span>: <span class="string">"Long-poll stream"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/relay/send/:id"</span>, <span class="string">"method"</span>: <span class="string">"POST"</span>, <span class="string">"description"</span>: <span class="string">"Send data"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/relay/close/:id"</span>, <span class="string">"method"</span>: <span class="string">"DELETE"</span>, <span class="string">"description"</span>: <span class="string">"Close relay"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/auth"</span>, <span class="string">"method"</span>: <span class="string">"POST"</span>, <span class="string">"description"</span>: <span class="string">"Authenticate"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/verify"</span>, <span class="string">"method"</span>: <span class="string">"POST"</span>, <span class="string">"description"</span>: <span class="string">"Verify token"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/delete/:id"</span>, <span class="string">"method"</span>: <span class="string">"DELETE"</span>, <span class="string">"description"</span>: <span class="string">"Delete server"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/update/:id"</span>, <span class="string">"method"</span>: <span class="string">"PUT"</span>, <span class="string">"description"</span>: <span class="string">"Update server"</span>},
+        {<span class="string">"path"</span>: <span class="string">"/api/status"</span>, <span class="string">"method"</span>: <span class="string">"GET"</span>, <span class="string">"description"</span>: <span class="string">"Service status"</span>}
+    ]
+}</code></pre>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- API ERROR CODES REFERENCE -->
+    <!-- ============================================ -->
+    <h2>📋 Common Error Codes</h2>
+    <div class="table-wrapper">
+        能able
+            <thead>
+                全<th>Status Code</th><th>Name</th><th>Description</th> </thead>
+            <tbody>
+                <tr><td>400</td><td>Bad Request</td><td>Invalid request format or validation failed</td> </tr>
+                <tr><td>401</td><td>Unauthorized</td><td>Missing or invalid authentication token</td> </tr>
+                <tr><td>403</td><td>Forbidden</td><td>Authenticated but insufficient permissions</td> </tr>
+                <tr><td>404</td><td>Not Found</td><td>Resource not found (server, session, etc.)</td> </tr>
+                <tr><td>405</td><td>Method Not Allowed</td><td>HTTP method not supported for this endpoint</td> </tr>
+                <tr><td>409</td><td>Conflict</td><td>Resource already exists (duplicate registration)</td> </tr>
+                <tr><td>410</td><td>Gone</td><td>Server offline (no recent heartbeat)</td> </tr>
+                <tr><td>413</td><td>Payload Too Large</td><td>Request exceeds size limit (10KB)</td> </tr>
+                <tr><td>415</td><td>Unsupported Media Type</td><td>Content-Type must be application/json</td> </tr>
+                <tr><td>429</td><td>Too Many Requests</td><td>Rate limit exceeded, check Retry-After header</td> </tr>
+                <tr><td>500</td><td>Internal Server Error</td><td>Server-side error, check logs</td> </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- API VIDEO DEMO -->
+    <!-- ============================================ -->
+    <div class="video-placeholder" data-video-id="api-demo" style="margin-top: 2rem;">
+        <div class="play-icon">▶️</div>
+        <div class="placeholder-text">🎬 API Demo - Complete API Walkthrough</div>
+        <div class="placeholder-caption">Placeholder: api-demo.mp4 - Demonstrates all API endpoints with curl examples</div>
+        <div class="duration">⏱️ Duration: 5:00</div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- API TESTING SECTION -->
+    <!-- ============================================ -->
+    <h2>🧪 Testing the API</h2>
+    <p>You can test the API using curl commands:</p>
+    <div class="code-block">
+        <pre><code><span class="comment"># Check service status</span>
+curl https://your-site.netlify.app/api/status
+
+<span class="comment"># Register a test server</span>
+curl -X POST https://your-site.netlify.app/api/register \
+  -H "Content-Type: application/json" \
+  -d '{"server_id":"test-001","name":"Test Server","port":5000}'
+
+<span class="comment"># List servers</span>
+curl https://your-site.netlify.app/api/servers
+
+<span class="comment"># Send heartbeat</span>
+curl -X POST https://your-site.netlify.app/api/heartbeat/test-001
+
+<span class="comment"># Request connection</span>
+curl -X POST https://your-site.netlify.app/api/connect \
+  -H "Content-Type: application/json" \
+  -d '{"server_id":"test-001"}'
+
+<span class="comment"># Authenticate (admin)</span>
+curl -X POST https://your-site.netlify.app/api/auth \
+  -H "Content-Type: application/json" \
+  -d '{"username":"admin","password":"your_password"}'
+
+<span class="comment"># Delete a server (requires admin token)</span>
+curl -X DELETE https://your-site.netlify.app/api/delete/test-001 \
+  -H "Authorization: Bearer &lt;your_token&gt;"</code></pre>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- SUPPORT SECTION -->
+    <!-- ============================================ -->
+    <div class="success" style="text-align: center; margin: 3rem 0;">
+        <h3 style="margin-bottom: 0.5rem;">Need API Support?</h3>
+        <p style="margin-bottom: 1rem;">Have questions about the API? Check our documentation or reach out to us.</p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <a href="https://github.com/yourusername/remote-control-system/issues" class="btn btn-primary">API Issues</a>
+            <a href="#/docs" class="btn btn-secondary">Read Documentation</a>
+            <a href="https://github.com/yourusername/remote-control-system/wiki/API" class="btn btn-outline">API Wiki</a>
+        </div>
+    </div>
+</div>

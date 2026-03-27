@@ -1,0 +1,572 @@
+﻿<div class="container">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1>Installation Guide</h1>
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Choose your operating system for detailed installation instructions. The Remote Control System works on Windows, Linux, and macOS.</p>
+    </div>
+    
+    <!-- OS Tabs -->
+    <div class="tabs">
+        <button class="tab active" data-tab="windows-tab">🪟 Windows</button>
+        <button class="tab" data-tab="linux-tab">🐧 Linux</button>
+        <button class="tab" data-tab="macos-tab">🍎 macOS</button>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- WINDOWS INSTALLATION -->
+    <!-- ============================================ -->
+    <div id="windows-tab" class="tab-content active">
+        <h2>Windows Installation <span class="os-badge os-windows">Windows 10/11, Server 2019+</span></h2>
+        
+        <!-- Windows Video Placeholder -->
+        <div class="video-placeholder" data-video-id="windows-install-video">
+            <div class="play-icon">▶️</div>
+            <div class="placeholder-text">🎬 Windows Installation Video Guide</div>
+            <div class="placeholder-caption">Placeholder: windows-install-video.mp4 - Complete Windows installation walkthrough</div>
+            <div class="duration">⏱️ Duration: 3:00</div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Prerequisites</h3>
+                <ul>
+                    <li>Windows 7 or later (64-bit recommended)</li>
+                    <li>Administrator privileges</li>
+                    <li>PowerShell 5.0 or later</li>
+                </ul>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🪟 Windows PowerShell Check</div>
+                    <div class="placeholder-caption">Placeholder: windows-powershell.png - Shows checking PowerShell version with `$PSVersionTable`</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Quick Install (Recommended)</h3>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Run PowerShell as Administrator</span>
+.\deploy_server.ps1 -PackagePath .\deploy\RemoteControl_Server_v2.0.0.zip -RegisterService -ConfigureFirewall
+
+<span class="comment"># For client installation</span>
+.\deploy_client.ps1 -PackagePath .\deploy\RemoteControl_Client_v2.0.0.zip -ServerIP 192.168.1.100 -CreateShortcuts</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🪟 Quick Install Running</div>
+                    <div class="placeholder-caption">Placeholder: windows-quick-install.png - Shows the PowerShell quick install process</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Manual Install (Advanced)</h3>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Extract package</span>
+Expand-Archive RemoteControl_Server_v2.0.0.zip -DestinationPath C:\Temp\ServerInstall
+
+<span class="comment"># Run installer</span>
+cd C:\Temp\ServerInstall
+.\install_server.ps1
+
+<span class="comment"># Configure firewall (optional)</span>
+netsh advfirewall firewall add rule name="Remote Control Server" dir=in action=allow protocol=TCP localport=5000
+
+<span class="comment"># Register Windows service (optional)</span>
+.\remote_service.ps1 -Mode install</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h3>Verify Installation</h3>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Check service status</span>
+Get-Service RemoteControlServer
+
+<span class="comment"># Check firewall rule</span>
+netsh advfirewall show rule name="Remote Control Server"
+
+<span class="comment"># Check if port is listening</span>
+netstat -an | findstr :5000</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🪟 Installation Verification</div>
+                    <div class="placeholder-caption">Placeholder: windows-verify.png - Shows service running, firewall rule, and listening port</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="success">
+            <strong>✅ Windows installation complete!</strong> The server is now running as a Windows service. Clients can now connect.
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- LINUX INSTALLATION -->
+    <!-- ============================================ -->
+    <div id="linux-tab" class="tab-content">
+        <h2>Linux Installation <span class="os-badge os-linux">Ubuntu / Debian / Fedora / Arch</span></h2>
+        
+        <!-- Linux Video Placeholder -->
+        <div class="video-placeholder" data-video-id="linux-install-video">
+            <div class="play-icon">▶️</div>
+            <div class="placeholder-text">🐧 Linux Installation Video Guide</div>
+            <div class="placeholder-caption">Placeholder: linux-install-video.mp4 - Complete Linux installation walkthrough for multiple distributions</div>
+            <div class="duration">⏱️ Duration: 4:00</div>
+        </div>
+        
+        <!-- Ubuntu/Debian Section -->
+        <h3>Ubuntu / Debian</h3>
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h4>Install Dependencies</h4>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Update package list</span>
+sudo apt update
+
+<span class="comment"># Install Python and dependencies</span>
+sudo apt install -y python3 python3-pip python3-venv python3-dev
+sudo apt install -y xdotool scrot x11-utils
+
+<span class="comment"># Install pip packages</span>
+pip3 install pyautogui pygame cryptography pillow psutil netifaces requests</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🐧 Ubuntu/Debian Prerequisites</div>
+                    <div class="placeholder-caption">Placeholder: linux-ubuntu-prereq.png - Shows apt install commands running</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Fedora/RHEL Section -->
+        <h3>Fedora / RHEL / CentOS</h3>
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h4>Install Dependencies</h4>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Install Python and dependencies</span>
+sudo dnf install -y python3 python3-pip python3-devel
+sudo dnf install -y xdotool scrot xorg-x11-utils
+
+<span class="comment"># Install pip packages</span>
+pip3 install pyautogui pygame cryptography pillow psutil netifaces requests</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🐧 Fedora/RHEL Prerequisites</div>
+                    <div class="placeholder-caption">Placeholder: linux-fedora-prereq.png - Shows dnf install commands</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Arch Linux Section -->
+        <h3>Arch Linux</h3>
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h4>Install Dependencies</h4>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Install Python and dependencies</span>
+sudo pacman -S python python-pip xdotool scrot
+
+<span class="comment"># Install pip packages</span>
+pip install pyautogui pygame cryptography pillow psutil netifaces requests</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🐧 Arch Linux Prerequisites</div>
+                    <div class="placeholder-caption">Placeholder: linux-arch-prereq.png - Shows pacman install commands</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Common Linux Steps -->
+        <h3>Run the Installer (All Distributions)</h3>
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h4>Install and Start the Server</h4>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Make scripts executable</span>
+chmod +x scripts/install_server.sh scripts/start_server.sh
+
+<span class="comment"># Run the installer</span>
+./scripts/install_server.sh
+
+<span class="comment"># Start the server</span>
+./start_server.sh
+
+<span class="comment"># To run in background</span>
+nohup ./start_server.sh &</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🐧 Running Linux Installer</div>
+                    <div class="placeholder-caption">Placeholder: linux-installer.png - Shows the installer running in terminal</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h4>Configure Firewall (Optional)</h4>
+                <div class="code-block">
+                    <pre><code><span class="comment"># For ufw (Ubuntu/Debian)</span>
+sudo ufw allow 5000/tcp
+
+<span class="comment"># For firewalld (Fedora/RHEL)</span>
+sudo firewall-cmd --permanent --add-port=5000/tcp
+sudo firewall-cmd --reload
+
+<span class="comment"># For iptables</span>
+sudo iptables -A INPUT -p tcp --dport 5000 -j ACCEPT</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🐧 Linux Firewall Configuration</div>
+                    <div class="placeholder-caption">Placeholder: linux-firewall.png - Shows firewall configuration commands</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h4>Run as Systemd Service (Optional)</h4>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Create service file</span>
+sudo nano /etc/systemd/system/remotecontrol.service
+
+<span class="comment"># Add content:</span>
+[Unit]
+Description=Remote Control Server
+After=network.target
+
+[Service]
+Type=simple
+User=$USER
+WorkingDirectory=/home/$USER/RemoteControlSystem
+ExecStart=/usr/bin/python3 server_app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+
+<span class="comment"># Enable and start service</span>
+sudo systemctl enable remotecontrol
+sudo systemctl start remotecontrol
+sudo systemctl status remotecontrol</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🐧 Systemd Service Configuration</div>
+                    <div class="placeholder-caption">Placeholder: linux-systemd.png - Shows systemd service status</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="success">
+            <strong>✅ Linux installation complete!</strong> The server is now running. Use `systemctl status remotecontrol` to check status.
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- MACOS INSTALLATION -->
+    <!-- ============================================ -->
+    <div id="macos-tab" class="tab-content">
+        <h2>macOS Installation <span class="os-badge os-macos">macOS 11+ (Big Sur, Monterey, Ventura, Sonoma)</span></h2>
+        
+        <!-- macOS Video Placeholder -->
+        <div class="video-placeholder" data-video-id="macos-install-video">
+            <div class="play-icon">▶️</div>
+            <div class="placeholder-text">🍎 macOS Installation Video Guide</div>
+            <div class="placeholder-caption">Placeholder: macos-install-video.mp4 - Complete macOS installation walkthrough with permission setup</div>
+            <div class="duration">⏱️ Duration: 3:30</div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Install Homebrew (Package Manager)</h3>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Install Homebrew if not already installed</span>
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+<span class="comment"># Verify installation</span>
+brew --version</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🍎 Homebrew Installation</div>
+                    <div class="placeholder-caption">Placeholder: macos-homebrew.png - Shows Homebrew installation in Terminal</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Install Python and Dependencies</h3>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Install Python 3.11 via Homebrew</span>
+brew install python@3.11
+
+<span class="comment"># Install required system dependencies</span>
+brew install scrot
+brew install xdotool
+
+<span class="comment"># Install Python packages</span>
+pip3 install pyautogui pygame cryptography pillow psutil netifaces requests</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🍎 Python Installation via Homebrew</div>
+                    <div class="placeholder-caption">Placeholder: macos-python.png - Shows Python installation via Homebrew</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Grant Screen Recording Permission</h3>
+                <p>macOS requires explicit permission for screen capture. Follow these steps:</p>
+                <ol>
+                    <li>Open <strong>System Settings</strong> → <strong>Privacy & Security</strong></li>
+                    <li>Select <strong>Screen Recording</strong></li>
+                    <li>Click the <strong>+</strong> button and add your terminal app (Terminal, iTerm2, or your IDE)</li>
+                    <li>Toggle the switch to enable permission</li>
+                    <li>Restart the terminal application</li>
+                </ol>
+                <div class="warning">
+                    <strong>⚠️ Important:</strong> Without screen recording permission, the screen capture feature will not work!
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🍎 Screen Recording Permission Settings</div>
+                    <div class="placeholder-caption">Placeholder: macos-screen-recording.png - Shows System Settings with Screen Recording permission enabled</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h3>Grant Accessibility Permission</h3>
+                <p>For keyboard and mouse control, grant accessibility permission:</p>
+                <ol>
+                    <li>Open <strong>System Settings</strong> → <strong>Privacy & Security</strong></li>
+                    <li>Select <strong>Accessibility</strong></li>
+                    <li>Click the <strong>+</strong> button and add your terminal app</li>
+                    <li>Enable the toggle for your terminal app</li>
+                </ol>
+                <div class="warning">
+                    <strong>⚠️ Important:</strong> Without accessibility permission, keyboard and mouse control will not work!
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🍎 Accessibility Permission Settings</div>
+                    <div class="placeholder-caption">Placeholder: macos-accessibility.png - Shows System Settings with Accessibility permission enabled</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+                <h3>Run the Installer</h3>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Make scripts executable</span>
+chmod +x scripts/install_server.sh scripts/start_server.sh
+
+<span class="comment"># Run the installer</span>
+./scripts/install_server.sh
+
+<span class="comment"># Start the server</span>
+./start_server.sh
+
+<span class="comment"># To run in background</span>
+nohup ./start_server.sh &</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🍎 Running macOS Installer</div>
+                    <div class="placeholder-caption">Placeholder: macos-installer.png - Shows the installer running in Terminal</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">6</div>
+            <div class="step-content">
+                <h3>Configure macOS Firewall (Optional)</h3>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Check firewall status</span>
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate
+
+<span class="comment"># Allow the Python application</span>
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --add /usr/local/bin/python3
+sudo /usr/libexec/ApplicationFirewall/socketfilterfw --unblock /usr/local/bin/python3</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🍎 macOS Firewall Configuration</div>
+                    <div class="placeholder-caption">Placeholder: macos-firewall.png - Shows firewall configuration in Terminal</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-number">7</div>
+            <div class="step-content">
+                <h3>Run as LaunchDaemon (Optional - Auto-start on Login)</h3>
+                <div class="code-block">
+                    <pre><code><span class="comment"># Create LaunchAgents plist file</span>
+nano ~/Library/LaunchAgents/com.remotecontrol.server.plist
+
+<span class="comment"># Add content:</span>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"&gt;
+&lt;plist version="1.0"&gt;
+&lt;dict&gt;
+    &lt;key&gt;Label&lt;/key&gt;
+    &lt;string&gt;com.remotecontrol.server&lt;/string&gt;
+    &lt;key&gt;ProgramArguments&lt;/key&gt;
+    &lt;array&gt;
+        &lt;string&gt;/usr/local/bin/python3&lt;/string&gt;
+        &lt;string&gt;/Users/$USER/RemoteControlSystem/server_app.py&lt;/string&gt;
+    &lt;/array&gt;
+    &lt;key&gt;RunAtLoad&lt;/key&gt;
+    &lt;true/&gt;
+    &lt;key&gt;KeepAlive&lt;/key&gt;
+    &lt;true/&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+
+<span class="comment"># Load the service</span>
+launchctl load ~/Library/LaunchAgents/com.remotecontrol.server.plist
+
+<span class="comment"># Check if running</span>
+launchctl list | grep remotecontrol</code></pre>
+                </div>
+                <div class="image-placeholder">
+                    <div class="placeholder-text">🍎 LaunchDaemon Configuration</div>
+                    <div class="placeholder-caption">Placeholder: macos-launchd.png - Shows LaunchDaemon status</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="success">
+            <strong>✅ macOS installation complete!</strong> The server is now running. Verify with `launchctl list | grep remotecontrol`.
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- CLIENT INSTALLATION (ALL PLATFORMS) -->
+    <!-- ============================================ -->
+    <h2>📱 Client Installation (All Platforms)</h2>
+    <p>The client can be installed on Windows, Linux, or macOS using the same package.</p>
+    
+    <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+            <h3>Install the Client</h3>
+            <div class="code-block">
+                <pre><code><span class="comment"># Windows</span>
+.\deploy_client.ps1 -PackagePath .\deploy\RemoteControl_Client_v2.0.0.zip -ServerIP 192.168.1.100 -CreateShortcuts
+
+<span class="comment"># Linux/macOS</span>
+./deploy_client.sh --package-path ./deploy/RemoteControl_Client_v2.0.0.zip --server-ip 192.168.1.100</code></pre>
+            </div>
+            <div class="image-placeholder">
+                <div class="placeholder-text">📱 Client Installation</div>
+                <div class="placeholder-caption">Placeholder: client-install.png - Shows client installation process</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+            <h3>Start the Client</h3>
+            <div class="code-block">
+                <pre><code><span class="comment"># Windows (double-click desktop shortcut or run)</span>
+start_client.bat --ip 192.168.1.100
+
+<span class="comment"># Linux/macOS</span>
+./start_client.sh --ip 192.168.1.100</code></pre>
+            </div>
+            <div class="image-placeholder">
+                <div class="placeholder-text">🚀 Client Startup</div>
+                <div class="placeholder-caption">Placeholder: client-startup.png - Shows the client window launching</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+            <h3>First Connection</h3>
+            <p>Enter the admin password from server installation, then click the window to capture mouse control.</p>
+            <div class="image-placeholder">
+                <div class="placeholder-text">🔌 First Connection Screen</div>
+                <div class="placeholder-caption">Placeholder: first-connection.png - Shows the client connection dialog</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- TROUBLESHOOTING SECTION -->
+    <!-- ============================================ -->
+    <h2>🔧 Troubleshooting</h2>
+    <div class="card-grid">
+        <div class="card">
+            <h3>Windows Issues</h3>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li><strong>Service won't start:</strong> Check logs at `C:\Program Files\RemoteControlServer\logs\server.log`</li>
+                <li><strong>Firewall blocking:</strong> Run `netsh advfirewall firewall add rule name="Remote Control Server" dir=in action=allow protocol=TCP localport=5000`</li>
+                <li><strong>Port in use:</strong> Change port in server_config.json</li>
+                <li><strong>Permission denied:</strong> Run PowerShell as Administrator</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Linux Issues</h3>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li><strong>xdotool not found:</strong> `sudo apt install xdotool` (Ubuntu) or `sudo dnf install xdotool` (Fedora)</li>
+                <li><strong>scrot not found:</strong> `sudo apt install scrot` (Ubuntu) or `sudo dnf install scrot` (Fedora)</li>
+                <li><strong>Permission denied:</strong> `chmod +x *.sh`</li>
+                <li><strong>Service not starting:</strong> Check logs at `~/RemoteControlSystem/logs/server.log`</li>
+                <li><strong>Systemd service fails:</strong> Check `sudo journalctl -u remotecontrol`</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>macOS Issues</h3>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li><strong>Screen Recording not working:</strong> Re-check System Settings → Privacy & Security → Screen Recording</li>
+                <li><strong>Accessibility not working:</strong> Re-check System Settings → Privacy & Security → Accessibility</li>
+                <li><strong>Homebrew not found:</strong> Run `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`</li>
+                <li><strong>Python not found:</strong> Run `brew install python@3.11`</li>
+                <li><strong>LaunchDaemon not loading:</strong> Check `launchctl list | grep remotecontrol` and verify plist syntax</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>General Issues</h3>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li><strong>Can't connect:</strong> Verify server is running and firewall allows port 5000</li>
+                <li><strong>Authentication failed:</strong> Reset password with `secure_server.ps1 -ResetPassword`</li>
+                <li><strong>High latency:</strong> Check connection type (UDP is fastest, Relay is slowest)</li>
+                <li><strong>Screen not updating:</strong> Check screen capture is enabled in config</li>
+                <li><strong>Connection drops:</strong> Enable auto-reconnect in client config</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- SUPPORT SECTION -->
+    <!-- ============================================ -->
+    <div class="success" style="text-align: center; margin: 3rem 0;">
+        <h3 style="margin-bottom: 0.5rem;">Need Help?</h3>
+        <p style="margin-bottom: 1rem;">Visit our GitHub repository for issues, discussions, and documentation.</p>
+        <a href="https://github.com/yourusername/remote-control-system/issues" class="btn btn-primary">Report Issue</a>
+        <a href="https://github.com/yourusername/remote-control-system/discussions" class="btn btn-secondary" style="margin-left: 1rem;">Ask Question</a>
+        <a href="#/docs" class="btn btn-outline" style="margin-left: 1rem;">Read Documentation</a>
+    </div>
+</div>

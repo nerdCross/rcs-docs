@@ -1,0 +1,573 @@
+﻿<div class="container">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1>Security Architecture</h1>
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Remote Control System v2.0 is built with security as the primary concern—not an afterthought. Every layer is designed to protect your connections and data.</p>
+    </div>
+    
+    <!-- Security Layers Diagram -->
+    <div class="image-placeholder">
+        <div class="placeholder-text">🛡️ 7 Layers of Defense - Complete Security Architecture</div>
+        <div class="placeholder-caption">Placeholder: security-layers.png - Visual representation of all 7 security layers with detailed annotations</div>
+    </div>
+    
+    <!-- Security Video Placeholder -->
+    <div class="video-placeholder" data-video-id="security-video">
+        <div class="play-icon">▶️</div>
+        <div class="placeholder-text">🔒 Security Features Deep Dive</div>
+        <div class="placeholder-caption">Placeholder: security-video.mp4 - Detailed explanation of all security layers and threat mitigation</div>
+        <div class="duration">⏱️ Duration: 4:00</div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- LAYER 1: NETWORK SECURITY -->
+    <!-- ============================================ -->
+    <h2>🛡️ Layer 1: Network Security</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">🔒</div>
+            <h3>Transport Layer Security (TLS 1.2/1.3)</h3>
+            <p>All communication is encrypted with TLS 1.2 or 1.3, ensuring no eavesdropping or man-in-the-middle attacks.</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Perfect Forward Secrecy (ECDHE key exchange)</li>
+                <li>Strong cipher suites: ECDHE+AESGCM, ECDHE+CHACHA20</li>
+                <li>Certificate validation via certifi (trusted CA bundle)</li>
+                <li>HSTS, CSP, and X-Frame-Options security headers</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🌐</div>
+            <h3>IP Whitelisting</h3>
+            <p>Restrict access to specific IP addresses or ranges. Empty list allows all IPs, but you can configure strict limits.</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code>"allowed_ips": ["192.168.1.0/24", "10.0.0.0/8"]</code></pre>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🔥</div>
+            <h3>Windows Firewall Integration</h3>
+            <p>Automatic firewall rule creation during installation. Port 5000 is opened only for inbound TCP connections.</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code>netsh advfirewall firewall add rule name="Remote Control Server" dir=in action=allow protocol=TCP localport=5000</code></pre>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- LAYER 2: RATE LIMITING & DoS PROTECTION -->
+    <!-- ============================================ -->
+    <h2>⏱️ Layer 2: Rate Limiting & DoS Protection</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">🚦</div>
+            <h3>Per-Endpoint Limits</h3>
+            <p>Different rate limits for different endpoints to prevent abuse:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li><strong>/api/register</strong> - 10 requests per minute</li>
+                <li><strong>/api/connect</strong> - 5 requests per minute</li>
+                <li><strong>/api/auth</strong> - 5 requests per 15 minutes</li>
+                <li><strong>/api/delete</strong> - 5 requests per hour</li>
+                <li><strong>/api/heartbeat</strong> - 10 requests per minute</li>
+                <li><strong>/api/servers</strong> - 30 requests per minute</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🔨</div>
+            <h3>Progressive IP Blocking</h3>
+            <p>IP addresses that exceed limits are progressively blocked:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>5 violations → 15 minute block</li>
+                <li>10 violations → 30 minute block</li>
+                <li>15+ violations → 1 hour block</li>
+                <li>Whitelist available for trusted IPs</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>Token Bucket Algorithm</h3>
+            <p>Rate limiting uses the token bucket algorithm for smooth traffic shaping, allowing bursts within limits.</p>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- LAYER 3: AUTHENTICATION -->
+    <!-- ============================================ -->
+    <h2>🔐 Layer 3: Authentication</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">🔑</div>
+            <h3>Password Security</h3>
+            <p>Passwords are never stored in plain text:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>SHA256 hashing with random salt (16 bytes)</li>
+                <li>Format: "salt:hash" (prevents rainbow table attacks)</li>
+                <li>Constant-time comparison prevents timing attacks</li>
+                <li>Minimum 12-character password requirement (configurable)</li>
+            </ul>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code>"password_hash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8:abc123"</code></pre>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🎫</div>
+            <h3>Session Tokens</h3>
+            <p>After authentication, users receive a session token:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>32-byte cryptographically random tokens (secrets.token_hex(32))</li>
+                <li>1-hour expiration (configurable)</li>
+                <li>IP address binding (optional)</li>
+                <li>Automatic cleanup of expired sessions</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🚫</div>
+            <h3>Account Lockout</h3>
+            <p>Brute force protection with account lockout:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>3 failed attempts (configurable)</li>
+                <li>5-minute lockout duration</li>
+                <li>Lockout recorded in audit log</li>
+                <li>Admin can manually unlock</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- LAYER 4: AUTHORIZATION -->
+    <!-- ============================================ -->
+    <h2>👥 Layer 4: Authorization</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">📋</div>
+            <h3>Role-Based Access Control (RBAC)</h3>
+            <p>Users belong to groups with predefined permissions:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li><strong>Administrators</strong> - Full control, user management, audit access</li>
+                <li><strong>Developers</strong> - Keyboard, mouse, screen, file transfer</li>
+                <li><strong>Support</strong> - Screen view, keyboard, mouse</li>
+                <li><strong>Viewers</strong> - Screen view only</li>
+                <li><strong>Auditors</strong> - Audit logs only</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🎯</div>
+            <h3>Granular Permissions</h3>
+            <p>Fine-grained control over what each user can do:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>keyboard - Send keyboard input</li>
+                <li>mouse - Send mouse input</li>
+                <li>screen_view - View remote screen</li>
+                <li>file_transfer - Transfer files</li>
+                <li>system_commands - Execute system commands</li>
+                <li>config_modify - Modify configuration</li>
+                <li>user_management - Manage users</li>
+                <li>audit_view - View audit logs</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🔑</div>
+            <h3>API Keys</h3>
+            <p>Programmatic access with limited permissions:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Separate from user accounts</li>
+                <li>Expiration dates</li>
+                <li>IP whitelisting per key</li>
+                <li>Usage tracking</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- LAYER 5: INPUT VALIDATION -->
+    <!-- ============================================ -->
+    <h2>🛡️ Layer 5: Input Validation</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">💉</div>
+            <h3>SQL Injection Prevention</h3>
+            <p>All user inputs are sanitized to prevent SQL injection attacks:</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code><span class="comment"># SQL injection attempt blocked</span>
+Input: "'; DROP TABLE users; --"
+Sanitized: "' DROP TABLE users; "</code></pre>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🌐</div>
+            <h3>XSS Prevention</h3>
+            <p>Cross-site scripting attacks are prevented by removing dangerous patterns:</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code><span class="comment"># XSS attempt blocked</span>
+Input: "&lt;script&gt;alert('xss')&lt;/script&gt;"
+Sanitized: "alert('xss')"</code></pre>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">📏</div>
+            <h3>Length Limits & Pattern Validation</h3>
+            <p>All inputs have maximum lengths and pattern restrictions:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>server_id: max 255 chars, alphanumeric + _ -</li>
+                <li>name: max 100 chars</li>
+                <li>Request size: max 10KB</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- LAYER 6: AUDIT & MONITORING -->
+    <!-- ============================================ -->
+    <h2>📊 Layer 6: Audit & Monitoring</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">📝</div>
+            <h3>Complete Audit Trail</h3>
+            <p>Every action is logged in JSON format:</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code>{
+    "timestamp": "2024-01-15T10:30:00Z",
+    "action": "login_attempt",
+    "username": "admin",
+    "success": true,
+    "details": {"ip": "192.168.1.50"}
+}</code></pre>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">📈</div>
+            <h3>Performance Monitoring</h3>
+            <p>Real-time system metrics collection:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>CPU usage (%)</li>
+                <li>Memory usage (MB, %)</li>
+                <li>Disk usage (GB, %)</li>
+                <li>Network connections count</li>
+                <li>Process-specific metrics</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">📤</div>
+            <h3>Exportable Reports</h3>
+            <p>Generate compliance-ready reports:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>JSON format for SIEM integration</li>
+                <li>HTML reports for management</li>
+                <li>Filterable by date, user, action</li>
+                <li>Statistics and trends</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- LAYER 7: INTEGRITY -->
+    <!-- ============================================ -->
+    <h2>🔒 Layer 7: Integrity</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">✅</div>
+            <h3>SHA256 Checksums</h3>
+            <p>All packages include SHA256 hashes for integrity verification:</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code>SERVER_PACKAGE_SHA256: a1b2c3d4e5f67890abcdef1234567890...</code></pre>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">📦</div>
+            <h3>Isolated Python Environment</h3>
+            <p>No system Python dependencies. All packages are self-contained:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Embedded Python 3.11.8</li>
+                <li>No PATH modifications</li>
+                <li>No registry changes</li>
+                <li>No conflicts with system Python</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🔐</div>
+            <h3>Supply Chain Security</h3>
+            <p>All dependencies are pinned to specific versions and verified:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Exact version pins (e.g., pyautogui==0.9.54)</li>
+                <li>Checksums for all packages</li>
+                <li>Isolated installation (--target flag)</li>
+                <li>No automatic updates</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- AUDIT LOG EXAMPLE -->
+    <!-- ============================================ -->
+    <h2>📄 Audit Log Example</h2>
+    <div class="code-block">
+        <pre><code>{
+    "timestamp": "2024-01-15T10:30:00Z",
+    "action": "login_attempt",
+    "username": "admin",
+    "success": true,
+    "details": {"ip": "192.168.1.50"}
+}
+{
+    "timestamp": "2024-01-15T10:31:00Z",
+    "action": "command_executed",
+    "username": "admin",
+    "success": true,
+    "details": {"command": "whoami", "result": "admin\\n"}
+}
+{
+    "timestamp": "2024-01-15T10:32:00Z",
+    "action": "file_transfer",
+    "username": "developer",
+    "success": true,
+    "details": {"filename": "report.pdf", "size_bytes": 1024000, "direction": "download"}
+}
+{
+    "timestamp": "2024-01-15T10:33:00Z",
+    "action": "security_violation",
+    "username": "unknown",
+    "success": false,
+    "details": {"ip": "203.0.113.45", "violation_type": "rate_limit_exceeded", "attempts": 15}
+}
+{
+    "timestamp": "2024-01-15T10:34:00Z",
+    "action": "config_change",
+    "username": "admin",
+    "success": true,
+    "details": {"config_file": "server_config.json", "changes": {"port": 5000 -> 5001}}
+}</code></pre>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- COMPLIANCE STANDARDS -->
+    <!-- ============================================ -->
+    <h2>📋 Compliance Standards</h2>
+    <div class="table-wrapper">
+        能able
+            <thead>
+                全
+                    <th>Standard</th>
+                    <th>Control</th>
+                    <th>Implementation</th>
+                 </thead>
+            <tbody>
+                <tr>
+                    <td><strong>ISO 27001</strong></td>
+                    <td>A.9.2.1</td>
+                    <td>User registration/de-registration via auth.json</td>
+                 </tr>
+                <tr>
+                    <td><strong>ISO 27001</strong></td>
+                    <td>A.9.4.2</td>
+                    <td>Secure logon procedures with password hashing</td>
+                 </tr>
+                <tr>
+                    <td><strong>ISO 27001</strong></td>
+                    <td>A.12.4.1</td>
+                    <td>Event logging with complete audit trail</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>AC-2</td>
+                    <td>Account management with RBAC</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>AC-3</td>
+                    <td>Access enforcement with permissions</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>AC-7</td>
+                    <td>Unsuccessful logon attempts (account lockout)</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>AU-2</td>
+                    <td>Audit events with complete logging</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>AU-3</td>
+                    <td>Content of audit records (JSON format)</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>SC-7</td>
+                    <td>Boundary protection with IP whitelisting</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>SC-8</td>
+                    <td>Transmission confidentiality with TLS + Fernet</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>SC-12</td>
+                    <td>Cryptographic key management (machine-specific keys)</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>SI-3</td>
+                    <td>Malicious code protection with input sanitization</td>
+                 </tr>
+                <tr>
+                    <td><strong>NIST 800-53</strong></td>
+                    <td>SI-4</td>
+                    <td>System monitoring with performance metrics</td>
+                 </tr>
+                <tr>
+                    <td><strong>CIS</strong></td>
+                    <td>1.1.1</td>
+                    <td>Password policy (complexity, length)</td>
+                 </tr>
+                <tr>
+                    <td><strong>CIS</strong></td>
+                    <td>2.2.2</td>
+                    <td>User rights with RBAC</td>
+                 </tr>
+                <tr>
+                    <td><strong>CIS</strong></td>
+                    <td>5.1</td>
+                    <td>Configure audit policy with complete logging</td>
+                 </tr>
+                <tr>
+                    <td><strong>CIS</strong></td>
+                    <td>8.1</td>
+                    <td>Windows Defender integration</td>
+                 </tr>
+                <tr>
+                    <td><strong>CIS</strong></td>
+                    <td>9.1</td>
+                    <td>Firewall configuration</td>
+                 </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- SECURITY BEST PRACTICES -->
+    <!-- ============================================ -->
+    <h2>✅ Security Best Practices</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">🔑</div>
+            <h3>Change Default Password</h3>
+            <p>Always change the default admin password immediately after installation.</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code>.\secure_server.ps1 -ResetPassword</code></pre>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🌐</div>
+            <h3>Enable IP Whitelisting</h3>
+            <p>Restrict access to known IP ranges for additional security.</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code>"allowed_ips": ["192.168.1.0/24", "10.0.0.0/8"]</code></pre>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>Monitor Audit Logs</h3>
+            <p>Regularly review audit logs for suspicious activity.</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code>Get-Content logs\audit.log | Select-String "failed"</code></pre>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🔄</div>
+            <h3>Regular Updates</h3>
+            <p>Keep the system updated with the latest security patches.</p>
+            <div class="code-block" style="margin-top: 0.5rem;">
+                <pre><code>git pull origin main
+.\scripts\build_separate_packages.ps1</code></pre>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- THREAT MODEL ANALYSIS -->
+    <!-- ============================================ -->
+    <h2>🎯 Threat Model Analysis</h2>
+    <div class="table-wrapper">
+        能able
+            <thead>
+                全
+                    <th>Threat</th>
+                    <th>Mitigation</th>
+                    <th>Effectiveness</th>
+                 </thead>
+            <tbody>
+                <tr>
+                    <td>Man-in-the-Middle</td>
+                    <td>TLS + Fernet encryption</td>
+                    <td>✅ Fully mitigated</td>
+                 </tr>
+                <tr>
+                    <td>Replay Attack</td>
+                    <td>Session tokens with expiry, nonce</td>
+                    <td>✅ Fully mitigated</td>
+                 </tr>
+                <tr>
+                    <td>Brute Force Password</td>
+                    <td>Rate limiting (5/15min) + lockout</td>
+                    <td>✅ Fully mitigated</td>
+                 </tr>
+                <tr>
+                    <td>DoS Attack</td>
+                    <td>Rate limiting (per endpoint)</td>
+                    <td>✅ Mitigated</td>
+                 </tr>
+                <tr>
+                    <td>SQL Injection</td>
+                    <td>Input sanitization</td>
+                    <td>✅ Mitigated</td>
+                 </tr>
+                <tr>
+                    <td>XSS</td>
+                    <td>Input sanitization</td>
+                    <td>✅ Mitigated</td>
+                 </tr>
+                <tr>
+                    <td>Command Injection</td>
+                    <td>Whitelisted commands only</td>
+                    <td>✅ Mitigated</td>
+                 </tr>
+                <tr>
+                    <td>Privilege Escalation</td>
+                    <td>Permission checks</td>
+                    <td>✅ Mitigated</td>
+                 </tr>
+                <tr>
+                    <td>Session Hijacking</td>
+                    <td>Short expiry (1h), IP tracking</td>
+                    <td>✅ Mitigated</td>
+                 </tr>
+                <tr>
+                    <td>Data Leakage</td>
+                    <td>Encryption at rest and in transit</td>
+                    <td>✅ Mitigated</td>
+                 </tr>
+                <tr>
+                    <td>Supply Chain Attack</td>
+                    <td>Checksums, pinned versions</td>
+                    <td>✅ Mitigated</td>
+                 </tr>
+                <tr>
+                    <td>Insider Threat</td>
+                    <td>Audit logs, permission restrictions</td>
+                    <td>✅ Mitigated</td>
+                 </tr>
+            </tbody>
+        点able
+    </div>
+    
+    <!-- ============================================ -->
+    <!-- CALL TO ACTION -->
+    <!-- ============================================ -->
+    <div class="success" style="text-align: center; margin: 3rem 0;">
+        <h3 style="margin-bottom: 0.5rem;">Security is Our Priority</h3>
+        <p style="margin-bottom: 1rem;">Deploy with confidence. Your connections are protected.</p>
+        <a href="#/installation" class="btn btn-primary">Get Started Securely</a>
+        <a href="https://github.com/yourusername/remote-control-system/security" class="btn btn-secondary" style="margin-left: 1rem;">Security Policy</a>
+    </div>
+</div>

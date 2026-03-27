@@ -1,0 +1,443 @@
+﻿<div class="container">
+    <!-- Page Header -->
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h1>Enterprise Features</h1>
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto;">Remote Control System v2.0 comes with a comprehensive suite of features designed for enterprise security, ease of use, and maximum compatibility.</p>
+    </div>
+    
+    <!-- Architecture Overview -->
+    <div class="image-placeholder" style="margin-bottom: 2rem;">
+        <div class="placeholder-text">📐 System Architecture Diagram</div>
+        <div class="placeholder-caption">Placeholder: architecture-diagram.png - Shows the complete system flow with Controller, Cloud Relay, and Controlled components</div>
+    </div>
+    
+    <!-- Security Features Section -->
+    <h2>🔒 Enterprise Security</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">🔐</div>
+            <h3>End-to-End Encryption</h3>
+            <p>All traffic is encrypted with Fernet (AES-128 in CBC mode with HMAC-SHA256) and TLS 1.2/1.3 with Perfect Forward Secrecy.</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Machine-specific key derivation (PBKDF2, 100,000 iterations)</li>
+                <li>Perfect Forward Secrecy via ephemeral session keys</li>
+                <li>Certificate validation via certifi (trusted CA bundle)</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🛡️</div>
+            <h3>7 Layers of Defense</h3>
+            <p>Defense in depth with multiple overlapping security controls:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Network Security - HTTPS only, IP whitelisting</li>
+                <li>Rate Limiting - Per-endpoint limits, IP blocking</li>
+                <li>Authentication - SHA256 with salt, constant-time comparison</li>
+                <li>Authorization - RBAC, granular permissions</li>
+                <li>Input Validation - SQL injection, XSS prevention</li>
+                <li>Audit & Monitoring - Complete audit trail</li>
+                <li>Integrity - SHA256 checksums, isolated environment</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">👤</div>
+            <h3>Granular Permissions</h3>
+            <p>Role-Based Access Control with fine-grained permissions:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Keyboard control</li>
+                <li>Mouse control</li>
+                <li>Screen viewing</li>
+                <li>File transfer</li>
+                <li>System commands</li>
+                <li>User management</li>
+                <li>Audit log access</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>Complete Audit Trail</h3>
+            <p>Every action is logged for compliance and forensic investigation:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>All login attempts (success/failure)</li>
+                <li>All commands executed</li>
+                <li>All file transfers</li>
+                <li>All configuration changes</li>
+                <li>Exportable JSON reports</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Network Features Section -->
+    <h2>🌐 Network & Connectivity</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">🎯</div>
+            <h3>3-Layer NAT Traversal</h3>
+            <p>Guaranteed connectivity on ANY network configuration:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li><strong>UDP Hole Punching</strong> - 5-20ms latency, 70-95% success rate</li>
+                <li><strong>TCP Hole Punching</strong> - 10-30ms latency, 85-98% success rate</li>
+                <li><strong>Relay Proxy</strong> - 50-200ms latency, 100% success rate</li>
+            </ul>
+            <div class="image-placeholder" style="margin-top: 1rem; padding: 1rem;">
+                <div class="placeholder-text">📡 NAT Traversal Diagram</div>
+                <div class="placeholder-caption">Placeholder: nat-traversal.png - Visual diagram of the 3-layer approach</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🔍</div>
+            <h3>Auto-Discovery</h3>
+            <p>Servers broadcast their presence automatically. No manual IP configuration needed.</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>UDP broadcast on port 5001 (every 5 seconds)</li>
+                <li>Client listening for discovery packets</li>
+                <li>Automatic server listing</li>
+                <li>No configuration required</li>
+            </ul>
+            <div class="image-placeholder" style="margin-top: 1rem; padding: 1rem;">
+                <div class="placeholder-text">📡 Discovery Broadcast</div>
+                <div class="placeholder-caption">Placeholder: discovery-broadcast.png - Shows UDP broadcast from server</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">☁️</div>
+            <h3>Cloud Relay</h3>
+            <p>Optional Netlify deployment for internet access when direct connections fail.</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Free tier: 125k requests/month</li>
+                <li>8 storage backends (GitHub Gist, Supabase, Redis, etc.)</li>
+                <li>Automatic server registration</li>
+                <li>Heartbeat monitoring (30-second intervals)</li>
+            </ul>
+            <div class="image-placeholder" style="margin-top: 1rem; padding: 1rem;">
+                <div class="placeholder-text">☁️ Cloud Relay Architecture</div>
+                <div class="placeholder-caption">Placeholder: cloud-relay-arch.png - Shows Netlify integration</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">🔌</div>
+            <h3>Multiple Connection Strategies</h3>
+            <p>Automatic fallback between connection methods:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li><strong>Auto</strong> - Tries all methods, picks fastest</li>
+                <li><strong>Direct</strong> - Connect to specific IP</li>
+                <li><strong>Discovery</strong> - Find servers on local network</li>
+                <li><strong>Cloud</strong> - Use Netlify relay</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Deployment Features Section -->
+    <h2>📦 Deployment & Portability</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">🐍</div>
+            <h3>Embedded Python</h3>
+            <p>Self-contained Python 3.11.8 environment. No system Python required.</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>No administrator rights needed (client)</li>
+                <li>No system PATH modifications</li>
+                <li>No registry changes</li>
+                <li>Multiple versions can coexist</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">💿</div>
+            <h3>Portable USB Mode</h3>
+            <p>Run directly from USB drive without installation.</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Extract to USB drive</li>
+                <li>Run from any computer</li>
+                <li>No traces left behind</li>
+                <li>Perfect for IT support</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🪟</div>
+            <h3>Windows Service</h3>
+            <p>Server runs as Windows service with auto-start on boot.</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Automatic startup</li>
+                <li>Auto-restart on crash</li>
+                <li>Event log integration</li>
+                <li>No user login required</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🐧</div>
+            <h3>Cross-Platform</h3>
+            <p>Works on Windows, Linux, and macOS.</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Windows: win32api, pyautogui</li>
+                <li>Linux: xdotool, scrot</li>
+                <li>macOS: Quartz, screencapture</li>
+                <li>Native performance on all platforms</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- User Experience Features Section -->
+    <h2>🎮 User Experience</h2>
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-icon">🖱️</div>
+            <h3>Full Remote Control</h3>
+            <p>Complete control over remote computer:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Real-time screen viewing (configurable FPS)</li>
+                <li>Keyboard input emulation</li>
+                <li>Mouse movement and clicks</li>
+                <li>Scroll wheel support</li>
+                <li>Multi-monitor support</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">⌨️</div>
+            <h3>Keyboard Shortcuts</h3>
+            <p>Quick access to common actions:</p>
+            <div class="keyboard-shortcuts" style="margin-top: 0.5rem;">
+                <div class="shortcut"><kbd>ESC</kbd> → Release mouse</div>
+                <div class="shortcut"><kbd>F2</kbd> → Toggle Dashboard</div>
+                <div class="shortcut"><kbd>F5</kbd> → Refresh</div>
+                <div class="shortcut"><kbd>F11</kbd> → Fullscreen</div>
+                <div class="shortcut"><kbd>F12</kbd> → Screenshot</div>
+                <div class="shortcut"><kbd>Ctrl+D</kbd> → Disconnect</div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-icon">📊</div>
+            <h3>Dashboard Mode</h3>
+            <p>Real-time monitoring and management:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Active server list with latency</li>
+                <li>Audit log viewer</li>
+                <li>Performance metrics (CPU, memory)</li>
+                <li>Server details and configuration</li>
+                <li>Toggle with F2</li>
+            </ul>
+        </div>
+        <div class="card">
+            <div class="card-icon">🖥️</div>
+            <h3>Headless Mode</h3>
+            <p>Terminal-based control for servers and automation:</p>
+            <ul style="margin-top: 0.5rem; padding-left: 1rem;">
+                <li>Curses-based terminal UI</li>
+                <li>Simple text output mode</li>
+                <li>Perfect for SSH sessions</li>
+                <li>Automation-friendly</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Storage Features Section -->
+    <h2>💾 Storage Backends</h2>
+    <p>The cloud relay supports 8 different storage backends. Choose the one that fits your needs:</p>
+    <div class="table-wrapper">
+         <table>
+            <thead>
+                <tr>
+                    <th>Backend</th>
+                    <th>Type</th>
+                    <th>Free Tier</th>
+                    <th>Best For</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>GitHub Gist</strong></td>
+                    <td>File-based</td>
+                    <td>Unlimited</td>
+                    <td>Simple, persistent, versioned</td>
+                </tr>
+                <tr>
+                    <td><strong>GitHub Issues</strong></td>
+                    <td>Issue-based</td>
+                    <td>Unlimited</td>
+                    <td>Creative storage, audit trail</td>
+                </tr>
+                <tr>
+                    <td><strong>Supabase</strong></td>
+                    <td>PostgreSQL</td>
+                    <td>500 MB</td>
+                    <td>Production, complex queries</td>
+                </tr>
+                <tr>
+                    <td><strong>Upstash Redis</strong></td>
+                    <td>In-memory</td>
+                    <td>10k commands/day</td>
+                    <td>Fast lookups, temporary data</td>
+                </tr>
+                <tr>
+                    <td><strong>Cloudflare KV</strong></td>
+                    <td>Key-Value</td>
+                    <td>1 GB</td>
+                    <td>Global distribution</td>
+                </tr>
+                <tr>
+                    <td><strong>MongoDB Atlas</strong></td>
+                    <td>Document</td>
+                    <td>512 MB</td>
+                    <td>Flexible schema</td>
+                </tr>
+                <tr>
+                    <td><strong>FaunaDB</strong></td>
+                    <td>Document</td>
+                    <td>100k reads/month</td>
+                    <td>ACID transactions</td>
+                </tr>
+                <tr>
+                    <td><strong>Memory</strong></td>
+                    <td>In-memory</td>
+                    <td>Unlimited</td>
+                    <td>Testing only</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Performance Metrics Section -->
+    <h2>⚡ Performance</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>UDP Hole Punch Latency</td>
+                    <td>5-20 ms</td>
+                    <td>Direct P2P connection</td>
+                </tr>
+                <tr>
+                    <td>TCP Hole Punch Latency</td>
+                    <td>10-30 ms</td>
+                    <td>When UDP is blocked</td>
+                </tr>
+                <tr>
+                    <td>Relay Proxy Latency</td>
+                    <td>50-200 ms</td>
+                    <td>Universal fallback</td>
+                </tr>
+                <tr>
+                    <td>Screen Capture FPS</td>
+                    <td>10-60 FPS</td>
+                    <td>Configurable</td>
+                </tr>
+                <tr>
+                    <td>Memory Usage (Server)</td>
+                    <td>~50 MB</td>
+                    <td>Idle</td>
+                </tr>
+                <tr>
+                    <td>Memory Usage (Client)</td>
+                    <td>~80 MB</td>
+                    <td>Active control</td>
+                </tr>
+                <tr>
+                    <td>Bandwidth Usage</td>
+                    <td>1-5 MB/min</td>
+                    <td>Depending on screen activity</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Comparison Section -->
+    <h2>📊 vs Traditional Solutions</h2>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Remote Control System</th>
+                    <th>RDP</th>
+                    <th>VNC</th>
+                    <th>TeamViewer</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Zero-Trust Security</td>
+                    <td>✅ Yes</td>
+                    <td>❌ No</td>
+                    <td>❌ No</td>
+                    <td>⚠️ Limited</td>
+                </tr>
+                <tr>
+                    <td>NAT Traversal</td>
+                    <td>✅ 3-layer</td>
+                    <td>❌ Requires port forwarding</td>
+                    <td>❌ Requires port forwarding</td>
+                    <td>✅ Yes</td>
+                </tr>
+                <tr>
+                    <td>Audit Trail</td>
+                    <td>✅ Complete JSON logs</td>
+                    <td>⚠️ Basic</td>
+                    <td>❌ No</td>
+                    <td>⚠️ Limited</td>
+                </tr>
+                <tr>
+                    <td>Open Source</td>
+                    <td>✅ Yes</td>
+                    <td>❌ No</td>
+                    <td>✅ Yes</td>
+                    <td>❌ No</td>
+                </tr>
+                <tr>
+                    <td>Self-Hosted</td>
+                    <td>✅ Yes</td>
+                    <td>✅ Yes</td>
+                    <td>✅ Yes</td>
+                    <td>❌ No</td>
+                </tr>
+                <tr>
+                    <td>Free Tier</td>
+                    <td>✅ Unlimited</td>
+                    <td>✅ Included in Windows</td>
+                    <td>✅ Free</td>
+                    <td>⚠️ Limited</td>
+                </tr>
+                <tr>
+                    <td>Windows Service</td>
+                    <td>✅ Yes</td>
+                    <td>✅ Yes</td>
+                    <td>✅ Yes</td>
+                    <td>⚠️ Limited</td>
+                </tr>
+                <tr>
+                    <td>Rate Limiting</td>
+                    <td>✅ Yes</td>
+                    <td>❌ No</td>
+                    <td>❌ No</td>
+                    <td>❌ No</td>
+                </tr>
+                <tr>
+                    <td>IP Blocking</td>
+                    <td>✅ Progressive</td>
+                    <td>⚠️ Basic</td>
+                    <td>⚠️ Basic</td>
+                    <td>❌ No</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- Demo Video Section -->
+    <div class="video-placeholder" data-video-id="features-demo" style="margin-top: 2rem;">
+        <div class="play-icon">▶️</div>
+        <div class="placeholder-text">🎬 Features Overview Demo</div>
+        <div class="placeholder-caption">Placeholder: features-demo.mp4 - Complete walkthrough of all features</div>
+        <div class="duration">⏱️ Duration: 4:00</div>
+    </div>
+    
+    <!-- Call to Action -->
+    <div class="success" style="text-align: center; margin: 3rem 0;">
+        <h3 style="margin-bottom: 0.5rem;">Ready to experience these features?</h3>
+        <p style="margin-bottom: 1rem;">Install the Remote Control System today and take full control.</p>
+        <a href="#/installation" class="btn btn-primary">Get Started Now</a>
+    </div>
+</div>
