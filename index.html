@@ -46,8 +46,7 @@
         (function() {
             var path = window.location.pathname;
             var repoMatch = path.match(/^\/([^\/]+)\/index\.html/);
-            window.BASE_PATH = repoMatch ? '/' + repoMatch[1] : '';
-            
+            window.BASE_PATH = window.location.pathname.replace(/\/index\.html$/, '').replace(/\/$/, '');            
             // Handle redirect from 404.html
             var redirectRoute = sessionStorage.getItem('redirectRoute');
             if (redirectRoute) {
